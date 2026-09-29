@@ -11,6 +11,14 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
+const MINI_APP_ORIGIN = 'https://wxb04wkjbs.onrender.com';
+const APP_BUILD_ID = process.env.RENDER_GIT_COMMIT || Date.now().toString(36);
+
+function getMiniAppUrl() {
+  const url = new URL(MINI_APP_ORIGIN);
+  url.searchParams.set('v', APP_BUILD_ID);
+  return url.toString();
+}
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -347,6 +355,16 @@ async function startTelegramPolling() {
     if (me.ok) {
       botInfo = me.result;
       addBotLog('info', `Бот подключен: @${me.result.username} (${me.result.first_name})`);
+      const menuResult = await tgApi('setChatMenuButton', {
+        menu_button: {
+          type: 'web_app',
+          text: 'Открыть DustTown',
+          web_app: { url: getMiniAppUrl() }
+        }
+      });
+      if (!menuResult.ok) {
+        addBotLog('error', `Не удалось обновить кнопку Mini App: ${menuResult.description || 'ошибка Telegram API'}`);
+      }
     } else {
       addBotLog('error', `Ошибка getMe: ${me.description || 'Неверный токен'}`);
     }
@@ -407,7 +425,7 @@ async function handleTelegramUpdate(update: any) {
 
   addBotLog('message', `[${userTag}]: ${text}`);
 
-  const appUrl = process.env.APP_URL || 'https://t.me/DustTown_RP_bot/app';
+  const appUrl = getMiniAppUrl();
 
   if (text.startsWith('/start')) {
     const welcomeText = `👋 Добро пожаловать в **Даст Таун Колектив** (DustTown Collective RP)!
@@ -424,6 +442,12 @@ async function handleTelegramUpdate(update: any) {
 
     const replyMarkup = {
       inline_keyboard: [
+        [
+          {
+            text: '🎮 Открыть DustTown',
+            web_app: { url: appUrl }
+          }
+        ],
         [
           {
             text: '⚠️ Сообщить о проблеме',
@@ -467,7 +491,7 @@ app.get('/api/bot/status', (req, res) => {
     logs: botLogs,
     lastError: lastBotError,
     tokenConfigured: Boolean(TELEGRAM_BOT_TOKEN),
-    appUrl: process.env.APP_URL || ''
+    appUrl: getMiniAppUrl()
   });
 });
 
@@ -494,7 +518,7 @@ app.post('/api/notify-group', async (req, res) => {
       return res.status(400).json({ error: 'Event object required' });
     }
 
-    const appUrl = process.env.APP_URL || 'https://t.me/DustTown_RP_bot/app';
+    const appUrl = getMiniAppUrl();
     const targetChat = process.env.TELEGRAM_GROUP_ID || '@DustTownCollective';
 
     let text = '';
@@ -581,7 +605,7 @@ app.post('/api/notify-completion', async (req, res) => {
   try {
     const { eventTitle, eventType, attendedUsernames, absentUsernames, rewardAmount, penaltyAmount } = req.body;
     const targetChat = process.env.TELEGRAM_GROUP_ID || '@DustTownCollective';
-    const appUrl = process.env.APP_URL || 'https://t.me/DustTown_RP_bot/app';
+    const appUrl = getMiniAppUrl();
 
     const typeLabel = eventType === 'collab'
       ? 'СОБЫТИЯ-КОЛЛАБОРАЦИИ'
