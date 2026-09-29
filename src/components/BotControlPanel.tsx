@@ -596,23 +596,48 @@ export const BotControlPanel: React.FC<BotControlPanelProps> = ({ onOpenMiniApp 
           <span>Логи сервера Telegram Бота</span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-black font-mono text-[11px] space-y-1 max-h-36 overflow-y-auto text-zinc-400 border border-zinc-800">
-          {logs.map(log => (
-            <div key={log.id} className="flex items-start gap-2">
-              <span className="text-zinc-600">[{log.time}]</span>
-              <span
-                className={
-                  log.type === 'error'
-                    ? 'text-red-400'
-                    : log.type === 'message'
-                    ? 'text-cyan-400'
-                    : 'text-emerald-400'
-                }
-              >
-                {log.text}
-              </span>
-            </div>
-          ))}
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_132px]">
+          <div className="min-w-0 p-3 rounded-2xl bg-black font-mono text-[11px] space-y-1 max-h-36 overflow-y-auto text-zinc-400 border border-zinc-800">
+            {logs.map(log => (
+              <div key={log.id} className="flex items-start gap-2">
+                <span className="text-zinc-600">[{log.time}]</span>
+                <span
+                  className={
+                    log.type === 'error'
+                      ? 'text-red-400'
+                      : log.type === 'message'
+                      ? 'text-cyan-400'
+                      : 'text-emerald-400'
+                  }
+                >
+                  {log.text}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="pony-runner" role="img" aria-label="Текстова поні біжить">
+            <span className="pony-runner__label">DUST DASH</span>
+            <pre className="pony-runner__frame pony-runner__frame--one" aria-hidden="true">{[
+              '   /\\',
+              '  /  \\_',
+              " ( o    '-.",
+              '  \\   ^   /',
+              "   '-._.-'",
+              '   /|  |\\',
+              '  _/    \\_'
+            ].join('\n')}</pre>
+            <pre className="pony-runner__frame pony-runner__frame--two" aria-hidden="true">{[
+              '   /\\',
+              '  /  \\_',
+              " ( o    '-.",
+              '  \\   ^   /',
+              "   '-._.-'",
+              ' _/|  |\\_',
+              '   /    \\'
+            ].join('\n')}</pre>
+            <span className="pony-runner__track" aria-hidden="true" />
+          </div>
         </div>
       </div>
     </div>

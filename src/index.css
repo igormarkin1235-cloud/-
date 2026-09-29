@@ -609,4 +609,81 @@
 .animate-toxic-vapor { animation: toxic-vapor 4.5s ease-in-out infinite; }
 .animate-neon-glow-flow { animation: neon-glow-flow 3.8s ease-in-out infinite; }
 
+.pony-runner {
+  position: relative;
+  display: flex;
+  min-height: 9rem;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid rgb(245 158 11 / 22%);
+  border-radius: 1rem;
+  background: radial-gradient(ellipse at 50% 100%, rgb(245 158 11 / 12%), transparent 70%), #09090b;
+}
+
+.pony-runner__label {
+  position: absolute;
+  top: 0.55rem;
+  color: #a1a1aa;
+  font: 9px 'Share Tech Mono', monospace;
+  letter-spacing: 0.12em;
+}
+
+.pony-runner__frame {
+  position: absolute;
+  margin: 0;
+  color: #fbbf24;
+  font: 11px/1.15 'Share Tech Mono', monospace;
+  text-shadow: 0 0 9px rgb(245 158 11 / 45%);
+  animation-duration: 360ms, 360ms;
+  animation-iteration-count: infinite, infinite;
+  animation-timing-function: steps(1, end), ease-in-out;
+}
+
+.pony-runner__frame--one {
+  animation-name: pony-frame-one, pony-bounce;
+}
+
+.pony-runner__frame--two {
+  opacity: 0;
+  animation-name: pony-frame-two, pony-bounce;
+}
+
+.pony-runner__track {
+  position: absolute;
+  right: 0.7rem;
+  bottom: 1.35rem;
+  left: 0.7rem;
+  border-top: 1px dashed rgb(161 161 170 / 35%);
+}
+
+@keyframes pony-frame-one {
+  0%, 49.9% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes pony-frame-two {
+  0%, 49.9% { opacity: 0; }
+  50%, 100% { opacity: 1; }
+}
+
+@keyframes pony-bounce {
+  0%, 100% { transform: translateY(2px); }
+  50% { transform: translateY(-2px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pony-runner__frame {
+    animation: none;
+  }
+
+  .pony-runner__frame--one {
+    opacity: 1;
+  }
+
+  .pony-runner__frame--two {
+    opacity: 0;
+  }
+}
+
 
