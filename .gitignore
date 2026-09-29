@@ -4,8 +4,8 @@ build/
 coverage/
 .DS_Store
 *.log
+*.zip
 .env*
 !.env.example
-222.zip
 dusttown-rp-render.zip
 .dusttown_data.json
